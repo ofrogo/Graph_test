@@ -4,7 +4,7 @@ public class Node {
     private String name;
     private Map<String, Long> nodes;
 
-    public Node(String name, Map<String, Long> nodes) {
+    Node(String name, Map<String, Long> nodes) {
         this.name = name;
         this.nodes = nodes;
     }
