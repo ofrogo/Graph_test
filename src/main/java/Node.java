@@ -24,4 +24,12 @@ public class Node {
     public void setNodes(Map<String, Long> nodes) {
         this.nodes = nodes;
     }
+
+    public void addConnect(String name_node, Long weight) {
+        nodes.put(name_node, weight);
+    }
+
+    public void deleteConnect(String name_node){
+        nodes.remove("name_node");
+    }
 }

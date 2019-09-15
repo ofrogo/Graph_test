@@ -26,8 +26,22 @@ public class Graph {
         nodeList.put(name, new Node(name, connections));
     }
 
-    private void addOneCon(String name_node1, String name_node2) {
-        nodeList.
+    private void addOneCon(String name_node1, String name_node2, Long weight) {
+        nodeList.get(name_node1).addConnect(name_node2, weight);
+    }
+
+    private void addTwoCon(String name_node1, String name_node2, Long weight) {
+        nodeList.get(name_node1).addConnect(name_node2, weight);
+        nodeList.get(name_node2).addConnect(name_node1, weight);
+    }
+
+    private void deleteNode(String name_model) {
+        nodeList.remove(name_model);
+        for (Node node : nodeList.values()) {
+            if (node.getNodes().containsKey(name_model)) {
+                node.getNodes().remove(name_model);
+            }
+        }
     }
 
     void getGraphFromFile(String fileName) throws Exception {
