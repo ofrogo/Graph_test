@@ -2,9 +2,9 @@ import java.util.Map;
 
 public class Node {
     private String name;
-    private Map<Node, Integer> nodes;
+    private Map<String, Long> nodes;
 
-    public Node(String name, Map<Node, Integer> nodes) {
+    public Node(String name, Map<String, Long> nodes) {
         this.name = name;
         this.nodes = nodes;
     }
@@ -17,11 +17,11 @@ public class Node {
         this.name = name;
     }
 
-    public Map<Node, Integer> getNodes() {
+    public Map<String, Long> getNodes() {
         return nodes;
     }
 
-    public void setNodes(Map<Node, Integer> nodes) {
+    public void setNodes(Map<String, Long> nodes) {
         this.nodes = nodes;
     }
 }

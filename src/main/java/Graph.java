@@ -2,7 +2,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -23,7 +25,7 @@ public class Graph {
 
         try (FileReader fileReader = new FileReader(path + fileName)) {
             JSONArray arrayNodes = (JSONArray) jsonParser.parse(fileReader);
-            arrayNodes.forEach(node -> parseNode(node));
+            arrayNodes.forEach(node -> nodeList.add(parseNode((JSONObject) node)));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -35,9 +37,24 @@ public class Graph {
 
     private Node parseNode(JSONObject obj) {
         String name = (String) obj.get("name");
-        JSONArray nodes = (JSONArray) obj.get("nodes");
-
+        JSONArray jsonNodes = (JSONArray) obj.get("nodes");
+        Map<String, Long> nodes = new HashMap<>();
+        String nameCon;
+        Long weight;
+        for (Object objNode : jsonNodes) {
+            JSONObject jsonObject = (JSONObject) objNode;
+            nameCon = (String) jsonObject.get("name");
+            weight = (Long) jsonObject.get("weight");
+            nodes.put(nameCon, weight);
+        }
+        return new Node(name, nodes);
     }
 
-    private
+    @Override
+    public String toString() {
+        return "Graph{" +
+                "path='" + path + '\'' +
+                ", nodeList=" + nodeList +
+                '}';
+    }
 }
