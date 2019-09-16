@@ -5,6 +5,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,10 +45,32 @@ public class Graph {
         }
     }
 
+    private void deleteOneCon(String name_model1, String name_model2) throws Exception {
+        nodeList.get(name_model1).deleteConnect(name_model2);
+    }
+
+    private void deleteTwoCon(String name_model1, String name_model2) throws Exception {
+        nodeList.get(name_model1).deleteConnect(name_model2);
+        nodeList.get(name_model2).deleteConnect(name_model1);
+    }
+
+    void saveGraphToFile(String fileName) {
+        JSONArray array = new JSONArray();
+        for (Node node : nodeList.values()) {
+            array.add(node.toJSONObject());
+        }
+        try (FileWriter fileWriter = new FileWriter(path + fileName)) {
+            fileWriter.write(array.toJSONString());
+            fileWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     void getGraphFromFile(String fileName) throws Exception {
         JSONParser jsonParser = new JSONParser();
 
-        if (nodeList != null) {
+        if (nodeList.size() != 0) {
             throw new Exception("Node list not empty!");
         }
 
