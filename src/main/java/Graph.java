@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 public class Graph {
     private String path = "/home/danil/Graph_test/src/main/resources/";
@@ -20,23 +21,24 @@ public class Graph {
     }
 
     Graph(Map<String, Node> nodeList) {
-        this.nodeList = new HashMap<String, Node>(nodeList);
+        this.nodeList = new HashMap<String, Node>();
+        nodeList.forEach((s, node) -> this.nodeList.put(s, node));
     }
 
-    private void addNode(String name, Map<String, Long> connections) {
+    public void addNode(String name, Map<String, Long> connections) {
         nodeList.put(name, new Node(name, connections));
     }
 
-    private void addOneCon(String name_node1, String name_node2, Long weight) {
+    public void addOneCon(String name_node1, String name_node2, Long weight) {
         nodeList.get(name_node1).addConnect(name_node2, weight);
     }
 
-    private void addTwoCon(String name_node1, String name_node2, Long weight) {
+    public void addTwoCon(String name_node1, String name_node2, Long weight) {
         nodeList.get(name_node1).addConnect(name_node2, weight);
         nodeList.get(name_node2).addConnect(name_node1, weight);
     }
 
-    private void deleteNode(String name_model) {
+    public void deleteNode(String name_model) {
         nodeList.remove(name_model);
         for (Node node : nodeList.values()) {
             if (node.getNodes().containsKey(name_model)) {
@@ -45,11 +47,11 @@ public class Graph {
         }
     }
 
-    private void deleteOneCon(String name_model1, String name_model2) throws Exception {
+    public void deleteOneCon(String name_model1, String name_model2) throws Exception {
         nodeList.get(name_model1).deleteConnect(name_model2);
     }
 
-    private void deleteTwoCon(String name_model1, String name_model2) throws Exception {
+    public void deleteTwoCon(String name_model1, String name_model2) throws Exception {
         nodeList.get(name_model1).deleteConnect(name_model2);
         nodeList.get(name_model2).deleteConnect(name_model1);
     }
@@ -105,8 +107,14 @@ public class Graph {
     @Override
     public String toString() {
         return "Graph{" +
-                "path='" + path + '\'' +
-                ", nodeList=" + nodeList +
+                "nodeList=" + toStringNodeList() +
                 '}';
+    }
+
+
+    public String toStringNodeList() {
+        final String[] str = {""};
+        nodeList.forEach((s, node) -> str[0] = str[0] + node.toString());
+        return str[0];
     }
 }

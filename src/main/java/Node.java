@@ -54,4 +54,12 @@ public class Node {
         json.put("nodes", jsonNodes);
         return json;
     }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                "name='" + name + '\'' +
+                ", nodes=" + nodes +
+                '}';
+    }
 }
