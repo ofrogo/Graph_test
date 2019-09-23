@@ -1,3 +1,5 @@
+package Entity;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -7,7 +9,7 @@ public class Node {
     private String name;
     private Map<String, Long> nodes;
 
-    Node(String name, Map<String, Long> nodes) {
+    public Node(String name, Map<String, Long> nodes) {
         this.name = name;
         this.nodes = nodes;
     }
@@ -57,9 +59,8 @@ public class Node {
 
     @Override
     public String toString() {
-        return "Node{" +
-                "name='" + name + '\'' +
-                ", nodes=" + nodes +
-                '}';
+        return " Node{" + name  +
+                " : " + nodes +
+                "}\n";
     }
 }

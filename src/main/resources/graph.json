@@ -1,20 +1,37 @@
-[
-  {
-    "name": "Node 1",
-    "nodes": [
-      {
-        "name": "Node 2",
-        "weight": 0
-      }
-    ]
-  },
-  {
-    "name": "Node 2",
-    "nodes": [
-      {
-        "name": "Node 1",
-        "weight": 0
-      }
-    ]
-  }
-]
+{
+  "weighted": false,
+  "directed": true,
+  "nodeList": [
+    {
+      "nodes": [
+        {
+          "name": "Test",
+          "weight": 0
+        },
+        {
+          "name": "Node2",
+          "weight": 0
+        }
+      ],
+      "name": "Node1"
+    },
+    {
+      "nodes": [
+        {
+          "name": "Node1",
+          "weight": 0
+        }
+      ],
+      "name": "Test"
+    },
+    {
+      "nodes": [
+        {
+          "name": "Node1",
+          "weight": 0
+        }
+      ],
+      "name": "Node2"
+    }
+  ]
+}
