@@ -2,6 +2,7 @@ package Graph;
 
 import Service.GraphService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,7 @@ public class GraphDirectedUnweighted extends GraphAbstract {
         weighted = false;
     }
 
-    public void addNode(String name, List<String> conLabels) throws Exception {
+    private void addNode(String name, List<String> conLabels) throws Exception {
         Map<String, Long> connections = new HashMap<>();
         conLabels.forEach(s -> connections.put(s, 0L));
         addNode(name, connections);
@@ -25,11 +26,11 @@ public class GraphDirectedUnweighted extends GraphAbstract {
         super.deleteNode(name_model);
     }
 
-    public void addCon(String first_label, String second_label) throws Exception {
+    private void addCon(String first_label, String second_label) throws Exception {
         addOneCon(first_label, second_label, 0L);
     }
 
-    public void deleteCon(String name_model1, String name_model2) throws Exception {
+    private void deleteCon(String name_model1, String name_model2) throws Exception {
         deleteOneCon(name_model1, name_model2);
     }
 
@@ -39,17 +40,16 @@ public class GraphDirectedUnweighted extends GraphAbstract {
             case 1: {
                 System.out.println("Enter name of node:");
                 String name = scanner.next();
-                Map<String, Long> nodesMap = new HashMap<>();
+                List<String> listLabels = new ArrayList<>();
                 if (sizeOfGraph() != 0) {
                     System.out.println("How many adjacent nodes? (max:" + sizeOfGraph() + ")");
                     int k = scanner.nextInt();
                     for (int i = 0; i < k; i++) {
                         System.out.println("Enter label adjacent node:");
-                        String label = scanner.next();
-                        nodesMap.put(label, 0L);
+                        listLabels.add(scanner.next());
                     }
                 }
-                addNode(name, nodesMap);
+                addNode(name, listLabels);
                 break;
             }
             case 2: {
@@ -64,7 +64,7 @@ public class GraphDirectedUnweighted extends GraphAbstract {
                 while (!containNode(first)) {
                     System.out.println("Don't know this label. Enter name of first nose:");
                     first = scanner.next();
-                    if(first.equals("quit")){
+                    if (first.equals("quit")) {
                         return;
                     }
                 }
@@ -73,7 +73,7 @@ public class GraphDirectedUnweighted extends GraphAbstract {
                 while (!containNode(second)) {
                     System.out.println("Don't know this label. Enter name of second nose:");
                     second = scanner.next();
-                    if(second.equals("quit")){
+                    if (second.equals("quit")) {
                         return;
                     }
                 }
@@ -86,7 +86,7 @@ public class GraphDirectedUnweighted extends GraphAbstract {
                 while (!containNode(first)) {
                     System.out.println("Don't know this label. Enter name of first nose:");
                     first = scanner.next();
-                    if(first.equals("quit")){
+                    if (first.equals("quit")) {
                         return;
                     }
                 }
@@ -95,7 +95,7 @@ public class GraphDirectedUnweighted extends GraphAbstract {
                 while (!containNode(second)) {
                     System.out.println("Don't know this label. Enter name of second nose:");
                     second = scanner.next();
-                    if(second.equals("quit")){
+                    if (second.equals("quit")) {
                         return;
                     }
                 }

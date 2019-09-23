@@ -28,7 +28,7 @@ public abstract class GraphAbstract {
         nodeList.put(name, new Node(name, connections));
     }
 
-    protected void addOneCon(String name_node1, String name_node2, Long weight) throws Exception {
+    void addOneCon(String name_node1, String name_node2, Long weight) throws Exception {
         if (containNode(name_node1) && containNode(name_node2)) {
             nodeList.get(name_node1).addConnect(name_node2, weight);
         } else {
@@ -36,7 +36,7 @@ public abstract class GraphAbstract {
         }
     }
 
-    protected void addTwoCon(String name_node1, String name_node2, Long weight) throws Exception {
+    void addTwoCon(String name_node1, String name_node2, Long weight) throws Exception {
         if (containNode(name_node1) && containNode(name_node2)) {
             nodeList.get(name_node1).addConnect(name_node2, weight);
             nodeList.get(name_node2).addConnect(name_node1, weight);
@@ -56,7 +56,7 @@ public abstract class GraphAbstract {
         }
     }
 
-    protected void deleteOneCon(String name_node1, String name_node2) throws Exception {
+    void deleteOneCon(String name_node1, String name_node2) throws Exception {
         if (containNode(name_node1) && containNode(name_node2)) {
             nodeList.get(name_node1).deleteConnect(name_node2);
         } else {
@@ -64,7 +64,7 @@ public abstract class GraphAbstract {
         }
     }
 
-    protected void deleteTwoCon(String name_node1, String name_node2) throws Exception {
+    void deleteTwoCon(String name_node1, String name_node2) throws Exception {
         if (containNode(name_node1) && containNode(name_node2)) {
             nodeList.get(name_node1).deleteConnect(name_node2);
             nodeList.get(name_node2).deleteConnect(name_node1);
@@ -74,7 +74,7 @@ public abstract class GraphAbstract {
     }
     public void showInUI(Scanner scanner) throws Exception{}
 
-    public int sizeOfGraph() {
+    int sizeOfGraph() {
         return nodeList.size();
     }
 
@@ -92,7 +92,7 @@ public abstract class GraphAbstract {
         return str[0];
     }
 
-    protected boolean containNode(String label) {
+    boolean containNode(String label) {
         return nodeList.containsKey(label);
     }
 

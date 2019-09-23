@@ -30,11 +30,11 @@ public class GraphUndirectedWeighted extends GraphAbstract {
         super.deleteNode(name_model);
     }
 
-    public void addCon(String name_node1, String name_node2, Long weight) throws Exception {
+    private void addCon(String name_node1, String name_node2, Long weight) throws Exception {
         addOneCon(name_node1, name_node2, weight);
     }
 
-    public void deleteCon(String name_model1, String name_model2) throws Exception {
+    private void deleteCon(String name_model1, String name_model2) throws Exception {
         deleteOneCon(name_model1, name_model2);
     }
 

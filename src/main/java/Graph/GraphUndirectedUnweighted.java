@@ -2,6 +2,7 @@ package Graph;
 
 import Service.GraphService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,7 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
         weighted = false;
     }
 
-    public void addNode(String name, List<String> conLabels) throws Exception {
+    private void addNode(String name, List<String> conLabels) throws Exception {
         Map<String, Long> connections = new HashMap<>();
         conLabels.forEach(s -> {
             connections.put(s, 0L);
@@ -32,11 +33,11 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
         super.deleteNode(name_model);
     }
 
-    public void addCon(String name_node1, String name_node2) throws Exception {
+    private void addCon(String name_node1, String name_node2) throws Exception {
         addTwoCon(name_node1, name_node2, 0L);
     }
 
-    public void deleteCon(String name_model1, String name_model2) throws Exception {
+    private void deleteCon(String name_model1, String name_model2) throws Exception {
         deleteTwoCon(name_model1, name_model2);
     }
 
@@ -46,17 +47,16 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
             case 1: {
                 System.out.println("Enter name of node:");
                 String name = scanner.next();
-                Map<String, Long> nodesMap = new HashMap<>();
+                List<String> listLabels = new ArrayList<>();
                 if (sizeOfGraph() != 0) {
                     System.out.println("How many adjacent nodes? (max:" + sizeOfGraph() + ")");
                     int k = scanner.nextInt();
                     for (int i = 0; i < k; i++) {
                         System.out.println("Enter label adjacent node:");
-                        String label = scanner.next();
-                        nodesMap.put(label, 0L);
+                        listLabels.add(scanner.next());
                     }
                 }
-                addNode(name, nodesMap);
+                addNode(name, listLabels);
                 break;
             }
             case 2: {
