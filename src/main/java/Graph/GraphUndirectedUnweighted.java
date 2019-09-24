@@ -34,6 +34,8 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
     }
 
     private void addCon(String name_node1, String name_node2) throws Exception {
+        if (name_node1.equals(name_node2))
+            throw new Exception("You cannot create loops in an undirected graph");
         addTwoCon(name_node1, name_node2, 0L);
     }
 
@@ -71,7 +73,7 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
                 while (!containNode(first)) {
                     System.out.println("Don't know this label. Enter name of first nose:");
                     first = scanner.next();
-                    if(first.equals("quit")){
+                    if (first.equals("quit")) {
                         return;
                     }
                 }
@@ -80,7 +82,7 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
                 while (!containNode(second)) {
                     System.out.println("Don't know this label. Enter name of second nose:");
                     second = scanner.next();
-                    if(second.equals("quit")){
+                    if (second.equals("quit")) {
                         return;
                     }
                 }
@@ -93,7 +95,7 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
                 while (!containNode(first)) {
                     System.out.println("Don't know this label. Enter name of first nose:");
                     first = scanner.next();
-                    if(first.equals("quit")){
+                    if (first.equals("quit")) {
                         return;
                     }
                 }
@@ -102,7 +104,7 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
                 while (!containNode(second)) {
                     System.out.println("Don't know this label. Enter name of second nose:");
                     second = scanner.next();
-                    if(second.equals("quit")){
+                    if (second.equals("quit")) {
                         return;
                     }
                 }
@@ -114,6 +116,10 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
                 GraphService.saveGraphToFile(scanner.next(), this);
                 break;
             }
+            case 6: {
+
+                break;
+            }
             default: {
                 System.out.println("Do you want to exit? Y/n");
                 if (scanner.next().toUpperCase().equals("Y")) {
@@ -123,5 +129,17 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
                 }
             }
         }
+    }
+
+    @Override
+    List<String> getLoopLabels() throws Exception {
+        throw new Exception("Undirected graph doesn't assume Loops");
+    }
+
+    @Override
+    public String toString() {
+        return "Undirected and Unweighted graph{\n" +
+                "nodeList=\n" + toStringNodeList() +
+                "}";
     }
 }

@@ -60,6 +60,7 @@ public class Main {
                             "3)Add edge.\n" +
                             "4)Delete edge.\n" +
                             "5)Save to file.\n" +
+                            "6)for_task*\n" +
                             "0)Exit.");
                     graph.showInUI(scanner);
                 }

@@ -2,7 +2,9 @@ package Graph;
 
 import Entity.Node;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -72,21 +74,15 @@ public abstract class GraphAbstract {
             throw new Exception("Node doesn't exist!");
         }
     }
-    public void showInUI(Scanner scanner) throws Exception{}
+
+    public void showInUI(Scanner scanner) throws Exception {
+    }
 
     int sizeOfGraph() {
         return nodeList.size();
     }
 
-    @Override
-    public String toString() {
-        return "Graph{\n" +
-                "nodeList=" + toStringNodeList() +
-                "\n}";
-    }
-
-
-    private String toStringNodeList() {
+    String toStringNodeList() {
         final String[] str = {""};
         nodeList.forEach((s, node) -> str[0] = str[0] + node.toString());
         return str[0];
@@ -94,6 +90,15 @@ public abstract class GraphAbstract {
 
     boolean containNode(String label) {
         return nodeList.containsKey(label);
+    }
+
+    List<String> getLoopLabels() throws Exception {
+        List<String> list = new ArrayList<>();
+        nodeList.forEach((s, n) -> {
+            if (n.containLoop())
+                list.add(s);
+        });
+        return list;
     }
 
     public Boolean getDirected() {

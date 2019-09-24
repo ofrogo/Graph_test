@@ -107,6 +107,18 @@ public class GraphDirectedUnweighted extends GraphAbstract {
                 GraphService.saveGraphToFile(scanner.next(), this);
                 break;
             }
+            case 6: {
+                System.out.println("Tasks:\n"+
+                        "1)1a.11 Show labels of loops");
+                switch (scanner.nextInt()){
+                    case 1:{
+                        System.out.println(getLoopLabels());
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
             default: {
                 System.out.println("Do you want to exit? Y/n");
                 if (scanner.next().toUpperCase().equals("Y")) {
@@ -116,5 +128,17 @@ public class GraphDirectedUnweighted extends GraphAbstract {
                 }
             }
         }
+    }
+
+    @Override
+    List<String> getLoopLabels() throws Exception {
+        return super.getLoopLabels();
+    }
+
+    @Override
+    public String toString() {
+        return "Directed and Unweighted graph{\n" +
+                "nodeList=\n" + toStringNodeList() +
+                "}";
     }
 }

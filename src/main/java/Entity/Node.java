@@ -57,9 +57,17 @@ public class Node {
         return json;
     }
 
+    public boolean containLoop() {
+        for (String s : nodes.keySet()) {
+            if (name.equals(s))
+                return true;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
-        return " Node{" + name  +
+        return " Node{" + name +
                 " : " + nodes +
                 "}\n";
     }

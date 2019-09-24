@@ -3,6 +3,7 @@ package Graph;
 import Service.GraphService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -31,7 +32,9 @@ public class GraphUndirectedWeighted extends GraphAbstract {
     }
 
     private void addCon(String name_node1, String name_node2, Long weight) throws Exception {
-        addOneCon(name_node1, name_node2, weight);
+        if(name_node1.equals(name_node2))
+            throw new Exception("You cannot create loops in an undirected graph");
+        addTwoCon(name_node1, name_node2, weight);
     }
 
     private void deleteCon(String name_model1, String name_model2) throws Exception {
@@ -124,5 +127,17 @@ public class GraphUndirectedWeighted extends GraphAbstract {
                 }
             }
         }
+    }
+
+    @Override
+    List<String> getLoopLabels() throws Exception {
+        throw new Exception("Undirected graph doesn't assume Loops");
+    }
+
+    @Override
+    public String toString() {
+        return "Undirected and Weighted graph{\n" +
+                "nodeList=\n" + toStringNodeList() +
+                "}";
     }
 }
