@@ -62,7 +62,7 @@ public class GraphDirectedWeighted extends GraphAbstract {
                 while (!containNode(first)) {
                     System.out.println("Don't know this label. Enter name of first nose:");
                     first = scanner.next();
-                    if(first.equals("quit")){
+                    if (first.equals("quit")) {
                         return;
                     }
                 }
@@ -71,7 +71,7 @@ public class GraphDirectedWeighted extends GraphAbstract {
                 while (!containNode(second)) {
                     System.out.println("Don't know this label. Enter name of second nose:");
                     second = scanner.next();
-                    if(second.equals("quit")){
+                    if (second.equals("quit")) {
                         return;
                     }
                 }
@@ -86,7 +86,7 @@ public class GraphDirectedWeighted extends GraphAbstract {
                 while (!containNode(first)) {
                     System.out.println("Don't know this label. Enter name of first nose:");
                     first = scanner.next();
-                    if(first.equals("quit")){
+                    if (first.equals("quit")) {
                         return;
                     }
                 }
@@ -95,7 +95,7 @@ public class GraphDirectedWeighted extends GraphAbstract {
                 while (!containNode(second)) {
                     System.out.println("Don't know this label. Enter name of second nose:");
                     second = scanner.next();
-                    if(second.equals("quit")){
+                    if (second.equals("quit")) {
                         return;
                     }
                 }
@@ -108,16 +108,31 @@ public class GraphDirectedWeighted extends GraphAbstract {
                 break;
             }
             case 6: {
-                System.out.println("Tasks:\n"+
-                        "1)1a.11 Show labels of loops");
-                switch (scanner.nextInt()){
-                    case 1:{
+                System.out.println("Tasks:\n" +
+                        "1)1a.11 Show labels of loops\n" +
+                        "2)1a.5 Show all hangings nodes.\n" +
+                        "3)1b.1 Inverse graph.");
+                switch (scanner.nextInt()) {
+                    case 1: {
                         System.out.println(getLoopLabels());
                         break;
+                    }
+                    case 2: {
+                        System.out.println(getHangingNodes());
+                    }
+                    case 3: {
+                        System.out.println("Weight information will be lost! Do you want to inverse? Y/n");
+                        if (scanner.next().toUpperCase().equals("Y")) {
+                            System.out.println("Graph has been inversed.");
+                            setInverseConForNodes();
+                        } else {
+                            break;
+                        }
                     }
                     default:
                         break;
                 }
+                break;
             }
             default: {
                 System.out.println("Do you want to exit? Y/n");

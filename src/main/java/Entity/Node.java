@@ -4,6 +4,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.Map;
+import java.util.Set;
 
 public class Node {
     private String name;
@@ -28,6 +29,11 @@ public class Node {
 
     public void setNodes(Map<String, Long> nodes) {
         this.nodes = nodes;
+    }
+
+    public void setNodes(Set<String> labels) {
+        nodes.clear();
+        labels.forEach(l -> nodes.put(l, 0L));
     }
 
     public void addConnect(String name_node, Long weight) {
@@ -63,6 +69,10 @@ public class Node {
                 return true;
         }
         return false;
+    }
+
+    public boolean isHangingNode() {
+        return nodes.size() == 1;
     }
 
     @Override

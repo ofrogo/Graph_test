@@ -108,16 +108,26 @@ public class GraphDirectedUnweighted extends GraphAbstract {
                 break;
             }
             case 6: {
-                System.out.println("Tasks:\n"+
-                        "1)1a.11 Show labels of loops");
-                switch (scanner.nextInt()){
-                    case 1:{
+                System.out.println("Tasks:\n" +
+                        "1)1a.11 Show labels of loops\n" +
+                        "2)1a.5 Show all hangings nodes.\n" +
+                        "3)1b.1 Inverse graph");
+                switch (scanner.nextInt()) {
+                    case 1: {
                         System.out.println(getLoopLabels());
                         break;
+                    }
+                    case 2: {
+                        System.out.println(getHangingNodes());
+                    }
+                    case 3: {
+                        System.out.println("Graph has been inversed.");
+                        setInverseConForNodes();
                     }
                     default:
                         break;
                 }
+                break;
             }
             default: {
                 System.out.println("Do you want to exit? Y/n");

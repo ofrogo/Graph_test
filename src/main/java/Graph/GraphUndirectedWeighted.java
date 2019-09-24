@@ -32,7 +32,7 @@ public class GraphUndirectedWeighted extends GraphAbstract {
     }
 
     private void addCon(String name_node1, String name_node2, Long weight) throws Exception {
-        if(name_node1.equals(name_node2))
+        if (name_node1.equals(name_node2))
             throw new Exception("You cannot create loops in an undirected graph");
         addTwoCon(name_node1, name_node2, weight);
     }
@@ -116,6 +116,29 @@ public class GraphUndirectedWeighted extends GraphAbstract {
             case 5: {
                 System.out.println("Enter file name:");
                 GraphService.saveGraphToFile(scanner.next(), this);
+                break;
+            }
+            case 6: {
+                System.out.println("Tasks:\n" +
+                        "1)1a.5 Show all hangings nodes.\n" +
+                        "2)1b.1 Inverse graph.");
+                switch (scanner.nextInt()) {
+                    case 1: {
+                        System.out.println(getHangingNodes());
+                        break;
+                    }
+                    case 2: {
+                        System.out.println("Weight information will be lost! Do you want to inverse? Y/n");
+                        if (scanner.next().toUpperCase().equals("Y")) {
+                            System.out.println("Graph has been inversed.");
+                            setInverseConForNodes();
+                        } else {
+                            break;
+                        }
+                    }
+                    default:
+                        break;
+                }
                 break;
             }
             default: {

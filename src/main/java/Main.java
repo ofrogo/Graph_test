@@ -15,7 +15,7 @@ public class Main {
         while (true) {
             try {
                 if (graph == null) {
-                    System.out.println("Graph.Graph absent.");
+                    System.out.println("Graph absent.");
                     System.out.println("Choose option:\n" +
                             "1)Create empty graph.\n" +
                             "2)Load graph from file.");

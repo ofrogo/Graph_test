@@ -4,9 +4,11 @@ import Entity.Node;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 public abstract class GraphAbstract {
 
@@ -21,6 +23,15 @@ public abstract class GraphAbstract {
     GraphAbstract(Map<String, Node> nodeList) {
         this.nodeList = new HashMap<>();
         nodeList.forEach((s, node) -> this.nodeList.put(s, node));
+    }
+
+    void setInverseConForNodes() {
+        for (Node n : nodeList.values()) {
+            Set<String> labels = new HashSet<>(nodeList.keySet());
+            Set<String> oldCon = n.getNodes().keySet();
+            labels.removeAll(oldCon);
+            n.setNodes(labels);
+        }
     }
 
     public void addNode(String name, Map<String, Long> connections) throws Exception {
@@ -98,6 +109,15 @@ public abstract class GraphAbstract {
             if (n.containLoop())
                 list.add(s);
         });
+        return list;
+    }
+
+    List<Node> getHangingNodes() {
+        List<Node> list = new ArrayList<>();
+        for (Node n : nodeList.values()) {
+            if (n.isHangingNode())
+                list.add(n);
+        }
         return list;
     }
 
