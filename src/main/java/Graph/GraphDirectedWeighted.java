@@ -37,8 +37,8 @@ public class GraphDirectedWeighted extends GraphAbstract {
                 System.out.println("Enter name of node:");
                 String name = scanner.next();
                 Map<String, Long> nodesMap = new HashMap<>();
-                if (sizeOfGraph() != 0) {
-                    System.out.println("How many adjacent nodes? (max:" + sizeOfGraph() + ")");
+                if (getNumberNodes() != 0) {
+                    System.out.println("How many adjacent nodes? (max:" + getNumberNodes() + ")");
                     int k = scanner.nextInt();
                     for (int i = 0; i < k; i++) {
                         System.out.println("Enter label and distance adjacent node:");
@@ -119,6 +119,7 @@ public class GraphDirectedWeighted extends GraphAbstract {
                     }
                     case 2: {
                         System.out.println(getHangingNodes());
+                        break;
                     }
                     case 3: {
                         System.out.println("Weight information will be lost! Do you want to inverse? Y/n");

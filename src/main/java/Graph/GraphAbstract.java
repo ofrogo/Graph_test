@@ -1,5 +1,6 @@
 package Graph;
 
+import Entity.Edge;
 import Entity.Node;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public abstract class GraphAbstract {
 
     Boolean directed;
     Boolean weighted;
-    Map<String, Node> nodeList;
+    private Map<String, Node> nodeList;
 
     GraphAbstract() {
         nodeList = new HashMap<>();
@@ -23,6 +24,10 @@ public abstract class GraphAbstract {
     GraphAbstract(Map<String, Node> nodeList) {
         this.nodeList = new HashMap<>();
         nodeList.forEach((s, node) -> this.nodeList.put(s, node));
+    }
+
+    public boolean isEmpty() {
+        return nodeList.isEmpty();
     }
 
     void setInverseConForNodes() {
@@ -39,6 +44,13 @@ public abstract class GraphAbstract {
             throw new Exception("Node with this label already exist!");
         }
         nodeList.put(name, new Node(name, connections));
+    }
+
+    public void addNode(Node node) throws Exception {
+        if (nodeList.containsKey(node.getName())) {
+            throw new Exception("Node with this label already exist!");
+        }
+        nodeList.put(node.getName(), node);
     }
 
     void addOneCon(String name_node1, String name_node2, Long weight) throws Exception {
@@ -86,16 +98,35 @@ public abstract class GraphAbstract {
         }
     }
 
-    public void showInUI(Scanner scanner) throws Exception {
+    public abstract void showInUI(Scanner scanner) throws Exception;
+
+    Set<Edge> getEdges() {
+        Set<Edge> edges = new HashSet<>();
+        for (Node n : nodeList.values()) {
+            for (String s2 : n.getNodes().keySet()) {
+                edges.add(new Edge(n.getName(), s2));
+            }
+        }
+        return edges;
     }
 
-    int sizeOfGraph() {
+    int getNumberNodes() {
         return nodeList.size();
+    }
+
+    int getNumberEdges() {
+        return getEdges().size();
     }
 
     String toStringNodeList() {
         final String[] str = {""};
         nodeList.forEach((s, node) -> str[0] = str[0] + node.toString());
+        return str[0];
+    }
+
+    String toStringUnwNodeList() {
+        final String[] str = {""};
+        nodeList.forEach((s, n) -> str[0] = str[0] + s + "::" + n.getNodes().keySet() + "; ");
         return str[0];
     }
 

@@ -15,6 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class GraphService {
     static String path = "/home/danil/Graph_test/src/main/resources/";
@@ -77,5 +78,38 @@ public class GraphService {
             nodes.put(nameCon, weight);
         }
         return new Node(name, nodes);
+    }
+
+    public static GraphUndirectedUnweighted cliqueProblem(GraphUndirectedUnweighted graph) {
+        return extend(graph, new GraphUndirectedUnweighted(), new GraphUndirectedUnweighted());
+
+    }
+
+    private static GraphUndirectedUnweighted extend(GraphUndirectedUnweighted candidates, GraphUndirectedUnweighted not, GraphUndirectedUnweighted compsub) {
+        while (candidates.isEmpty() && !not.isIntersection(candidates.getNodeList().keySet())) {
+            Node v = candidates.getNode();
+            compsub.addNode(v);
+            GraphUndirectedUnweighted new_candidates = new GraphUndirectedUnweighted(candidates);
+            for (Node n : new_candidates.getNodeList().values()) {
+                if (!n.getNodes().containsKey(v.getName())) {
+                    new_candidates.deleteNode(n.getName());
+                }
+            }
+            GraphUndirectedUnweighted new_not = new GraphUndirectedUnweighted(not);
+            for (Node n : new_not.getNodeList().values()) {
+                if (!n.getNodes().containsKey(v.getName())) {
+                    new_not.deleteNode(n.getName());
+                }
+            }
+            if (new_candidates.isEmpty() && new_not.isEmpty()) {
+                return compsub;
+            } else {
+                extend(new_candidates, new_not, compsub);
+            }
+            compsub.deleteNode(v.getName());
+            candidates.deleteNode(v.getName());
+            not.addNode(v);
+        }
+        return null;
     }
 }

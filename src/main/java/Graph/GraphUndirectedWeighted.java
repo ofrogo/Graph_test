@@ -48,8 +48,8 @@ public class GraphUndirectedWeighted extends GraphAbstract {
                 System.out.println("Enter name of node:");
                 String name = scanner.next();
                 Map<String, Long> nodesMap = new HashMap<>();
-                if (sizeOfGraph() != 0) {
-                    System.out.println("How many adjacent nodes? (max:" + sizeOfGraph() + ")");
+                if (getNumberNodes() != 0) {
+                    System.out.println("How many adjacent nodes? (max:" + getNumberNodes() + ")");
                     int k = scanner.nextInt();
                     for (int i = 0; i < k; i++) {
                         System.out.println("Enter label and distance adjacent node:");
@@ -121,7 +121,8 @@ public class GraphUndirectedWeighted extends GraphAbstract {
             case 6: {
                 System.out.println("Tasks:\n" +
                         "1)1a.5 Show all hangings nodes.\n" +
-                        "2)1b.1 Inverse graph.");
+                        "2)1b.1 Inverse graph.\n" +
+                        "3)II.11 Find the cyclomatic number of a graph.");
                 switch (scanner.nextInt()) {
                     case 1: {
                         System.out.println(getHangingNodes());
@@ -135,6 +136,10 @@ public class GraphUndirectedWeighted extends GraphAbstract {
                         } else {
                             break;
                         }
+                    }
+                    case 3: {
+                        System.out.println("Cyclomatic number: " + (getNumberEdges() - getNumberNodes() + 1));
+                        break;
                     }
                     default:
                         break;

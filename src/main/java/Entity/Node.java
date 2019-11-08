@@ -15,6 +15,10 @@ public class Node {
         this.nodes = nodes;
     }
 
+    public int getNumberEdges() {
+        return nodes.size();
+    }
+
     public String getName() {
         return name;
     }
@@ -46,7 +50,6 @@ public class Node {
         } else {
             throw new Exception(String.format("Connection %s with %s doesn't exist!", name, name_node));
         }
-
     }
 
     public JSONObject toJSONObject() {

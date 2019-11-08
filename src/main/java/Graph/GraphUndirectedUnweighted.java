@@ -1,8 +1,10 @@
 package Graph;
 
+import Entity.Node;
 import Service.GraphService;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,22 +17,51 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
         weighted = false;
     }
 
+    public GraphUndirectedUnweighted(GraphUndirectedUnweighted graph) {
+        super(graph.getNodeList());
+        directed = false;
+        weighted = false;
+    }
+
     private void addNode(String name, List<String> conLabels) throws Exception {
         Map<String, Long> connections = new HashMap<>();
         conLabels.forEach(s -> {
             connections.put(s, 0L);
+        });
+        super.addNode(name, connections);
+        conLabels.forEach(s -> {
             try {
                 addOneCon(s, name, 0L);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
-        addNode(name, connections);
     }
 
+    public void addNode(Node node) {
+        try {
+            super.addNode(node);
+            node.getNodes().forEach((s, l) -> {
+                try {
+                    addOneCon(s, node.getName(), 0L);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @Override
-    public void deleteNode(String name_model) throws Exception {
-        super.deleteNode(name_model);
+    public void deleteNode(String name_model) {
+        try {
+            super.deleteNode(name_model);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void addCon(String name_node1, String name_node2) throws Exception {
@@ -50,8 +81,8 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
                 System.out.println("Enter name of node:");
                 String name = scanner.next();
                 List<String> listLabels = new ArrayList<>();
-                if (sizeOfGraph() != 0) {
-                    System.out.println("How many adjacent nodes? (max:" + sizeOfGraph() + ")");
+                if (getNumberNodes() != 0) {
+                    System.out.println("How many adjacent nodes? (max:" + getNumberNodes() + ")");
                     int k = scanner.nextInt();
                     for (int i = 0; i < k; i++) {
                         System.out.println("Enter label adjacent node:");
@@ -119,7 +150,8 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
             case 6: {
                 System.out.println("Tasks:\n" +
                         "1)1a.5 Show all hangings nodes.\n" +
-                        "2)1b.1 Inverse graph");
+                        "2)1b.1 Inverse graph.\n" +
+                        "3)II.11 Find the cyclomatic number of a graph.");
                 switch (scanner.nextInt()) {
                     case 1: {
                         System.out.println(getHangingNodes());
@@ -128,6 +160,11 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
                     case 2: {
                         System.out.println("Graph has been inversed.");
                         setInverseConForNodes();
+                        break;
+                    }
+                    case 3: {
+                        System.out.println("Cyclomatic number: " + (getNumberEdges() - getNumberNodes() + 1));
+                        break;
                     }
                     default:
                         break;
@@ -153,7 +190,31 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
     @Override
     public String toString() {
         return "Undirected and Unweighted graph{\n" +
-                "nodeList=\n" + toStringNodeList() +
+                "nodeList=\n" + toStringUnwNodeList() +
                 "}";
+    }
+
+    List<String> getFullConNodes() {
+        List<String> list = new ArrayList<>();
+        int size = getNodeList().size();
+        for (Node n : getNodeList().values()) {
+            if (n.getNodes().size() == size) {
+                list.add(n.getName());
+            }
+        }
+        return list;
+    }
+
+    public boolean isIntersection(Collection<String> id_list) {
+        for (String s : id_list) {
+            if (getNodeList().containsKey(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Node getNode() {
+        return getNodeList().entrySet().iterator().next().getValue();
     }
 }

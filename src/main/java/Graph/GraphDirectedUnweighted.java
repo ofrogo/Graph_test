@@ -41,8 +41,8 @@ public class GraphDirectedUnweighted extends GraphAbstract {
                 System.out.println("Enter name of node:");
                 String name = scanner.next();
                 List<String> listLabels = new ArrayList<>();
-                if (sizeOfGraph() != 0) {
-                    System.out.println("How many adjacent nodes? (max:" + sizeOfGraph() + ")");
+                if (getNumberNodes() != 0) {
+                    System.out.println("How many adjacent nodes? (max:" + getNumberNodes() + ")");
                     int k = scanner.nextInt();
                     for (int i = 0; i < k; i++) {
                         System.out.println("Enter label adjacent node:");
@@ -119,6 +119,7 @@ public class GraphDirectedUnweighted extends GraphAbstract {
                     }
                     case 2: {
                         System.out.println(getHangingNodes());
+                        break;
                     }
                     case 3: {
                         System.out.println("Graph has been inversed.");
@@ -148,7 +149,7 @@ public class GraphDirectedUnweighted extends GraphAbstract {
     @Override
     public String toString() {
         return "Directed and Unweighted graph{\n" +
-                "nodeList=\n" + toStringNodeList() +
+                "nodeList=\n" + toStringUnwNodeList() +
                 "}";
     }
 }
