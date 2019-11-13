@@ -3,19 +3,16 @@ package Graph;
 import Entity.Edge;
 import Entity.Node;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public abstract class GraphAbstract {
 
     Boolean directed;
     Boolean weighted;
     private Map<String, Node> nodeList;
+
+
+    private Map<String, Boolean> used;
 
     GraphAbstract() {
         nodeList = new HashMap<>();
@@ -24,6 +21,72 @@ public abstract class GraphAbstract {
     GraphAbstract(Map<String, Node> nodeList) {
         this.nodeList = new HashMap<>();
         nodeList.forEach((s, node) -> this.nodeList.put(s, node));
+    }
+
+
+    public Map<String, List<String>> bfs(String id_cur) {
+        Map<String, Long> d = new HashMap<>();
+        for (String s : nodeList.keySet()) {
+            d.put(s, Long.MAX_VALUE);
+        }
+        d.put(id_cur, 0L);
+
+        Queue<String> queue = new ArrayDeque<>();
+        queue.add(id_cur);
+
+        Map<String, List<String>> paths = new HashMap<>();
+        paths.put(id_cur, new ArrayList<>());
+
+        while (!queue.isEmpty()) {
+            String v = queue.poll();
+            for (Map.Entry<String, Long> u : nodeList.get(v).getNodes().entrySet()) {
+                if (d.get(u.getKey()) > d.get(v) + u.getValue()) {
+                    d.put(u.getKey(), d.get(v) + u.getValue());
+                    List<String> buf = new ArrayList<>(paths.get(v));
+                    buf.add(u.getKey());
+                    paths.put(u.getKey(), buf);
+                    queue.add(u.getKey());
+                }
+            }
+        }
+
+
+        return paths;
+    }
+
+    private void dfs(String id_cur) {
+        if (used == null) {
+            used = new HashMap<>();
+            for (String s : nodeList.keySet()) {
+                used.put(s, false);
+            }
+        }
+        used.put(id_cur, true);
+        for (String id_adj : nodeList.get(id_cur).getNodes().keySet()) {
+            if (!used.get(id_adj)) {
+                dfs(id_adj);
+            }
+        }
+    }
+
+    int numberOfComponents() {
+        used = new HashMap<>();
+        for (String s : nodeList.keySet()) {
+            used.put(s, false);
+        }
+        int cnt = 0;
+        for (String s : nodeList.keySet()) {
+            if (!used.get(s)) {
+                dfs(s);
+                cnt++;
+            }
+        }
+        return cnt;
+    }
+
+    public long[][] getMatrix() {
+        long[][] matrix = new long[nodeList.size()][nodeList.size()];
+        return null;
     }
 
     public boolean isEmpty() {

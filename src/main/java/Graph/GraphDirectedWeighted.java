@@ -111,7 +111,8 @@ public class GraphDirectedWeighted extends GraphAbstract {
                 System.out.println("Tasks:\n" +
                         "1)1a.11 Show labels of loops\n" +
                         "2)1a.5 Show all hangings nodes.\n" +
-                        "3)1b.1 Inverse graph.");
+                        "3)1b.1 Inverse graph.\n" +
+                        "4)II.31 Find shortest path from node to all other nodes");
                 switch (scanner.nextInt()) {
                     case 1: {
                         System.out.println(getLoopLabels());
@@ -129,6 +130,18 @@ public class GraphDirectedWeighted extends GraphAbstract {
                         } else {
                             break;
                         }
+                    }
+                    case 4: {
+                        System.out.println("Enter name of node: ");
+                        String id_node = scanner.nextLine();
+                        for (Map.Entry<String, List<String>> entry : bfs(id_node).entrySet()) {
+                            System.out.print(entry.getKey() + " : { ");
+                            for (String s : entry.getValue()) {
+                                System.out.print(s + " ");
+                            }
+                            System.out.println("}");
+                        }
+                        break;
                     }
                     default:
                         break;

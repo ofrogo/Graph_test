@@ -17,7 +17,7 @@ public class GraphDirectedUnweighted extends GraphAbstract {
 
     private void addNode(String name, List<String> conLabels) throws Exception {
         Map<String, Long> connections = new HashMap<>();
-        conLabels.forEach(s -> connections.put(s, 0L));
+        conLabels.forEach(s -> connections.put(s, 1L));
         addNode(name, connections);
     }
 
@@ -27,7 +27,7 @@ public class GraphDirectedUnweighted extends GraphAbstract {
     }
 
     private void addCon(String first_label, String second_label) throws Exception {
-        addOneCon(first_label, second_label, 0L);
+        addOneCon(first_label, second_label, 1L);
     }
 
     private void deleteCon(String name_model1, String name_model2) throws Exception {
@@ -111,7 +111,8 @@ public class GraphDirectedUnweighted extends GraphAbstract {
                 System.out.println("Tasks:\n" +
                         "1)1a.11 Show labels of loops\n" +
                         "2)1a.5 Show all hangings nodes.\n" +
-                        "3)1b.1 Inverse graph");
+                        "3)1b.1 Inverse graph\n" +
+                        "4)II.31 Find shortest path from node to all other nodes");
                 switch (scanner.nextInt()) {
                     case 1: {
                         System.out.println(getLoopLabels());
@@ -124,6 +125,19 @@ public class GraphDirectedUnweighted extends GraphAbstract {
                     case 3: {
                         System.out.println("Graph has been inversed.");
                         setInverseConForNodes();
+                        break;
+                    }
+                    case 4: {
+                        System.out.println("Enter name of node: ");
+                        String id_node = scanner.next();
+                        for (Map.Entry<String, List<String>> entry : bfs(id_node).entrySet()) {
+                            System.out.print(entry.getKey() + " : { ");
+                            for (String s : entry.getValue()) {
+                                System.out.print(s + " ");
+                            }
+                            System.out.println("}");
+                        }
+                        break;
                     }
                     default:
                         break;

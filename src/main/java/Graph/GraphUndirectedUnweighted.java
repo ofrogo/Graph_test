@@ -31,7 +31,7 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
         super.addNode(name, connections);
         conLabels.forEach(s -> {
             try {
-                addOneCon(s, name, 0L);
+                addOneCon(s, name, 1L);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -43,7 +43,7 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
             super.addNode(node);
             node.getNodes().forEach((s, l) -> {
                 try {
-                    addOneCon(s, node.getName(), 0L);
+                    addOneCon(s, node.getName(), 1L);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -67,7 +67,7 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
     private void addCon(String name_node1, String name_node2) throws Exception {
         if (name_node1.equals(name_node2))
             throw new Exception("You cannot create loops in an undirected graph");
-        addTwoCon(name_node1, name_node2, 0L);
+        addTwoCon(name_node1, name_node2, 1L);
     }
 
     private void deleteCon(String name_model1, String name_model2) throws Exception {
@@ -151,7 +151,8 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
                 System.out.println("Tasks:\n" +
                         "1)1a.5 Show all hangings nodes.\n" +
                         "2)1b.1 Inverse graph.\n" +
-                        "3)II.11 Find the cyclomatic number of a graph.");
+                        "3)II.11 Find the cyclomatic number of a graph.\n" +
+                        "4)II.31 Find shortest path from node to all other nodes");
                 switch (scanner.nextInt()) {
                     case 1: {
                         System.out.println(getHangingNodes());
@@ -163,7 +164,19 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
                         break;
                     }
                     case 3: {
-                        System.out.println("Cyclomatic number: " + (getNumberEdges() - getNumberNodes() + 1));
+                        System.out.println("Cyclomatic number: " + (getNumberEdges() - getNumberNodes() + numberOfComponents()));
+                        break;
+                    }
+                    case 4: {
+                        System.out.println("Enter name of node: ");
+                        String id_node = scanner.nextLine();
+                        for (Map.Entry<String, List<String>> entry : bfs(id_node).entrySet()) {
+                            System.out.print(entry.getKey() + " : { ");
+                            for (String s : entry.getValue()) {
+                                System.out.print(s + " ");
+                            }
+                            System.out.println("}");
+                        }
                         break;
                     }
                     default:

@@ -19,6 +19,10 @@ public class Node {
         return nodes.size();
     }
 
+    public boolean isAdjacent(String id) {
+        return nodes.containsKey(id);
+    }
+
     public String getName() {
         return name;
     }

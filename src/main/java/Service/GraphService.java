@@ -112,4 +112,8 @@ public class GraphService {
         }
         return null;
     }
+
+    public int[] dijkstra(GraphAbstract graph, String id_node) {
+        return null;
+    }
 }

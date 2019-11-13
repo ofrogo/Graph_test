@@ -122,7 +122,8 @@ public class GraphUndirectedWeighted extends GraphAbstract {
                 System.out.println("Tasks:\n" +
                         "1)1a.5 Show all hangings nodes.\n" +
                         "2)1b.1 Inverse graph.\n" +
-                        "3)II.11 Find the cyclomatic number of a graph.");
+                        "3)II.11 Find the cyclomatic number of a graph.\n" +
+                        "4)II.31 Find shortest path from node to all other nodes");
                 switch (scanner.nextInt()) {
                     case 1: {
                         System.out.println(getHangingNodes());
@@ -138,7 +139,19 @@ public class GraphUndirectedWeighted extends GraphAbstract {
                         }
                     }
                     case 3: {
-                        System.out.println("Cyclomatic number: " + (getNumberEdges() - getNumberNodes() + 1));
+                        System.out.println("Cyclomatic number: " + (getNumberEdges() - getNumberNodes() + numberOfComponents()));
+                        break;
+                    }
+                    case 4: {
+                        System.out.println("Enter name of node: ");
+                        String id_node = scanner.nextLine();
+                        for (Map.Entry<String, List<String>> entry : bfs(id_node).entrySet()) {
+                            System.out.print(entry.getKey() + " : { ");
+                            for (String s : entry.getValue()) {
+                                System.out.print(s + " ");
+                            }
+                            System.out.println("}");
+                        }
                         break;
                     }
                     default:
