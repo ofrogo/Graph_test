@@ -5,6 +5,7 @@ import Graph.GraphAbstract;
 import Graph.GraphDirectedUnweighted;
 import Graph.GraphDirectedWeighted;
 import Graph.GraphUndirectedUnweighted;
+import Graph.GraphUndirectedWeighted;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -15,7 +16,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class GraphService {
     static String path = "/home/danil/Graph_test/src/main/resources/";
@@ -47,7 +47,7 @@ public class GraphService {
             if (weighted && directed) {
                 graph = new GraphDirectedWeighted();
             } else if (weighted && !directed) {
-                graph = new GraphDirectedUnweighted();
+                graph = new GraphUndirectedWeighted();
             } else if (!weighted && directed) {
                 graph = new GraphDirectedUnweighted();
             } else {
@@ -113,7 +113,4 @@ public class GraphService {
         return null;
     }
 
-    public int[] dijkstra(GraphAbstract graph, String id_node) {
-        return null;
-    }
 }

@@ -3,6 +3,8 @@ package Entity;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,9 +12,25 @@ public class Node {
     private String name;
     private Map<String, Long> nodes;
 
+    public Node(String name, Set<Edge> edges) {
+        this.name = name;
+        nodes = new HashMap<>();
+        for (Edge edge : edges) {
+            nodes.put(edge.getNodeId1().equals(name) ? edge.getNodeId2() : edge.getNodeId1(), edge.getValue());
+        }
+    }
+
     public Node(String name, Map<String, Long> nodes) {
         this.name = name;
         this.nodes = nodes;
+    }
+
+    public Set<Edge> getEdges() {
+        return new HashSet<Edge>() {{
+            for (Map.Entry<String, Long> entry : nodes.entrySet()) {
+                add(new Edge(name, entry.getKey(), entry.getValue()));
+            }
+        }};
     }
 
     public int getNumberEdges() {
@@ -80,6 +98,34 @@ public class Node {
 
     public boolean isHangingNode() {
         return nodes.size() == 1;
+    }
+
+    public Edge getMinEdge() throws Exception {
+        Edge res = new Edge("", "", Long.MAX_VALUE);
+        for (Edge edge : getEdges()) {
+            if (edge.getValue() < res.getValue()) {
+                res = edge;
+            }
+        }
+        if (res.getValue() == Long.MAX_VALUE) {
+            throw new Exception("Not found min edge in " + name);
+        }
+        return res;
+    }
+
+    public Edge getMinEdge(Set<Edge> excessEdge) throws Exception {
+        Edge res = new Edge("", "", Long.MAX_VALUE);
+        Set<Edge> newEdges = getEdges();
+        newEdges.removeAll(excessEdge);
+        for (Edge edge : newEdges) {
+            if (edge.getValue() < res.getValue()) {
+                res = edge;
+            }
+        }
+        if (res.getValue() == Long.MAX_VALUE) {
+            return null;
+        }
+        return res;
     }
 
     @Override

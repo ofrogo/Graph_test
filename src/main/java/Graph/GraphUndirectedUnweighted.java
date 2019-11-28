@@ -164,12 +164,12 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
                         break;
                     }
                     case 3: {
-                        System.out.println("Cyclomatic number: " + (getNumberEdges() - getNumberNodes() + numberOfComponents()));
+                        System.out.println("Cyclomatic number: " + (getNumberEdges() - getNumberNodes() + getNumberOfComponents()));
                         break;
                     }
                     case 4: {
                         System.out.println("Enter name of node: ");
-                        String id_node = scanner.nextLine();
+                        String id_node = scanner.next();
                         for (Map.Entry<String, List<String>> entry : bfs(id_node).entrySet()) {
                             System.out.print(entry.getKey() + " : { ");
                             for (String s : entry.getValue()) {

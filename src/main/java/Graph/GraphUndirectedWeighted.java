@@ -1,17 +1,50 @@
 package Graph;
 
+import Entity.Edge;
+import Entity.Node;
 import Service.GraphService;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 public class GraphUndirectedWeighted extends GraphAbstract {
     public GraphUndirectedWeighted() {
         super();
         directed = false;
         weighted = true;
+    }
+
+    GraphUndirectedWeighted(Node node) {
+        super(node);
+        directed = false;
+        weighted = true;
+    }
+
+    GraphUndirectedWeighted(Set<Edge> edgeSet) {
+        super();
+        directed = false;
+        weighted = true;
+        for (Edge edge : edgeSet) {
+            if (getNodeList().containsKey(edge.getNodeId1())) {
+                getNodeList().get(edge.getNodeId1()).getNodes().put(edge.getNodeId2(), edge.getValue());
+            } else {
+                getNodeList().put(edge.getNodeId1(), new Node(edge.getNodeId1(), new HashMap<String, Long>() {{
+                    put(edge.getNodeId2(), edge.getValue());
+                }}));
+            }
+            if (getNodeList().containsKey(edge.getNodeId2())) {
+                getNodeList().get(edge.getNodeId2()).getNodes().put(edge.getNodeId1(), edge.getValue());
+            } else {
+                getNodeList().put(edge.getNodeId2(), new Node(edge.getNodeId2(), new HashMap<String, Long>() {{
+                    put(edge.getNodeId1(), edge.getValue());
+                }}));
+            }
+        }
     }
 
     @Override
@@ -21,7 +54,7 @@ public class GraphUndirectedWeighted extends GraphAbstract {
             try {
                 addOneCon(s, name, l);
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         });
     }
@@ -119,11 +152,13 @@ public class GraphUndirectedWeighted extends GraphAbstract {
                 break;
             }
             case 6: {
+
                 System.out.println("Tasks:\n" +
                         "1)1a.5 Show all hangings nodes.\n" +
                         "2)1b.1 Inverse graph.\n" +
                         "3)II.11 Find the cyclomatic number of a graph.\n" +
-                        "4)II.31 Find shortest path from node to all other nodes");
+                        "4)II.31 Find shortest path from node to all other nodes\n" +
+                        "5)III Boruvka");
                 switch (scanner.nextInt()) {
                     case 1: {
                         System.out.println(getHangingNodes());
@@ -139,12 +174,12 @@ public class GraphUndirectedWeighted extends GraphAbstract {
                         }
                     }
                     case 3: {
-                        System.out.println("Cyclomatic number: " + (getNumberEdges() - getNumberNodes() + numberOfComponents()));
+                        System.out.println("Cyclomatic number: " + (getNumberEdges() - getNumberNodes() + getNumberOfComponents()));
                         break;
                     }
                     case 4: {
                         System.out.println("Enter name of node: ");
-                        String id_node = scanner.nextLine();
+                        String id_node = scanner.next();
                         for (Map.Entry<String, List<String>> entry : bfs(id_node).entrySet()) {
                             System.out.print(entry.getKey() + " : { ");
                             for (String s : entry.getValue()) {
@@ -152,6 +187,10 @@ public class GraphUndirectedWeighted extends GraphAbstract {
                             }
                             System.out.println("}");
                         }
+                        break;
+                    }
+                    case 5: {
+                        System.out.println(boruvka().toString());
                         break;
                     }
                     default:
@@ -168,6 +207,67 @@ public class GraphUndirectedWeighted extends GraphAbstract {
                 }
             }
         }
+    }
+
+    GraphUndirectedWeighted boruvka() throws Exception {
+        if (getNumberOfComponents() != 1) {
+            throw new Exception("Not connected graph");
+        }
+
+        LinkedList<Set<String>> components = new LinkedList<>();
+        getNodeList().keySet().forEach(s -> components.add(new HashSet<String>() {{
+            add(s);
+        }}));
+        Set<Edge> edges = new HashSet<>();
+
+        while (components.size() > 1) {
+            Set<String> comp = components.pop();
+            for (String nodeId : comp) {
+                Edge minEdge = getNodeList().get(nodeId).getMinEdge(edges);
+                if (minEdge != null) {
+                    edges.add(minEdge);
+                    String conNodeId = minEdge.getNodeId1().equals(nodeId) ? minEdge.getNodeId2() : minEdge.getNodeId1();
+                    if (!comp.contains(conNodeId)) {
+                        comp.addAll(components.stream().filter(strings -> strings.contains(conNodeId)).findFirst().get());
+                    } else {
+                        components.addLast(comp);
+                    }
+                } else {
+                    components.addLast(comp);
+                }
+            }
+
+        }
+
+        return new GraphUndirectedWeighted(edges);
+//        LinkedList<GraphUndirectedWeighted> graphLinkedList = new LinkedList<>();
+//        getNodeList().forEach((s, node) -> graphLinkedList.add(new GraphUndirectedWeighted(node)));
+//        for (int i = 0; !graphLinkedList.isEmpty(); i++) {
+//            GraphUndirectedWeighted graph = graphLinkedList.get(i);
+//            Edge minEdge = new Edge("", "", Long.MAX_VALUE);
+//            for (Edge e : graph.getEdges()) {
+//                if (e.getValue() < minEdge.getValue()) {
+//                    minEdge = e;
+//                }
+//            }
+//            LinkedList<GraphUndirectedWeighted> graphLinkedListTemp = new LinkedList<>(graphLinkedList);
+//            graphLinkedListTemp.remove(graph);
+//            for (GraphUndirectedWeighted g : graphLinkedListTemp) {
+//                if (g.getEdges().contains(minEdge)) {
+//                    if (graphLinkedList.remove(g)) {
+//                        graph.addGraph(g);
+//                        break;
+//                    } else {
+//                        throw new Exception("Error trying to merge subtrees");
+//                    }
+//                }
+//            }
+//        }
+//        if (graphLinkedList.size() == 1) {
+//            return graphLinkedList.getFirst();
+//        } else {
+//            throw new Exception("More then one components");
+//        }
     }
 
     @Override

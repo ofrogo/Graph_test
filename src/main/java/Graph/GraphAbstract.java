@@ -3,7 +3,15 @@ package Graph;
 import Entity.Edge;
 import Entity.Node;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Scanner;
+import java.util.Set;
 
 public abstract class GraphAbstract {
 
@@ -18,13 +26,25 @@ public abstract class GraphAbstract {
         nodeList = new HashMap<>();
     }
 
+    GraphAbstract(Node node) {
+        nodeList = new HashMap<>();
+        nodeList.put(node.getName(), node);
+    }
+
     GraphAbstract(Map<String, Node> nodeList) {
         this.nodeList = new HashMap<>();
         nodeList.forEach((s, node) -> this.nodeList.put(s, node));
     }
 
 
-    public Map<String, List<String>> bfs(String id_cur) {
+    void addGraph(GraphAbstract graphAbstract) throws Exception {
+        if (graphAbstract.directed != directed || graphAbstract.weighted != weighted) {
+            throw new Exception("Error trying to connect graphs of different types");
+        }
+        nodeList.putAll(graphAbstract.nodeList);
+    }
+
+    Map<String, List<String>> bfs(String id_cur) {
         Map<String, Long> d = new HashMap<>();
         for (String s : nodeList.keySet()) {
             d.put(s, Long.MAX_VALUE);
@@ -69,7 +89,7 @@ public abstract class GraphAbstract {
         }
     }
 
-    int numberOfComponents() {
+    int getNumberOfComponents() {
         used = new HashMap<>();
         for (String s : nodeList.keySet()) {
             used.put(s, false);
@@ -84,10 +104,21 @@ public abstract class GraphAbstract {
         return cnt;
     }
 
-    public long[][] getMatrix() {
-        long[][] matrix = new long[nodeList.size()][nodeList.size()];
-        return null;
+    List<String> getNodesIdFromVariousComponents() {
+        used = new HashMap<>();
+        for (String s : nodeList.keySet()) {
+            used.put(s, false);
+        }
+        List<String> nodes = new ArrayList<>();
+        for (String s : nodeList.keySet()) {
+            if (!used.get(s)) {
+                dfs(s);
+                nodes.add(s);
+            }
+        }
+        return nodes;
     }
+
 
     public boolean isEmpty() {
         return nodeList.isEmpty();
@@ -166,8 +197,8 @@ public abstract class GraphAbstract {
     Set<Edge> getEdges() {
         Set<Edge> edges = new HashSet<>();
         for (Node n : nodeList.values()) {
-            for (String s2 : n.getNodes().keySet()) {
-                edges.add(new Edge(n.getName(), s2));
+            for (Map.Entry<String, Long> entry : n.getNodes().entrySet()) {
+                edges.add(new Edge(n.getName(), entry.getKey(), entry.getValue()));
             }
         }
         return edges;
