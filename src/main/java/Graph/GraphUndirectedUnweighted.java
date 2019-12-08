@@ -1,6 +1,5 @@
 package Graph;
 
-import Entity.Edge;
 import Entity.Node;
 import Service.GraphService;
 
@@ -22,7 +21,7 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
     private void addNode(String name, List<String> conLabels) throws Exception {
         Map<String, Long> connections = new HashMap<>();
         conLabels.forEach(s -> {
-            connections.put(s, 0L);
+            connections.put(s, 1L);
         });
         super.addNode(name, connections);
         conLabels.forEach(s -> {
@@ -148,7 +147,8 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
                         "1)1a.5 Show all hangings nodes.\n" +
                         "2)1b.1 Inverse graph.\n" +
                         "3)II.11 Find the cyclomatic number of a graph.\n" +
-                        "4)II.31 Find shortest path from node to all other nodes");
+                        "4)II.31 Find shortest path from node to all other nodes.\n" +
+                        "5)IV.a Find centre.");
                 switch (scanner.nextInt()) {
                     case 1: {
                         System.out.println(getHangingNodes());
@@ -175,6 +175,10 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
                         }
                         break;
                     }
+                    case 5: {
+                        System.out.println(center());
+                        break;
+                    }
                     default:
                         break;
                 }
@@ -194,11 +198,6 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
     @Override
     List<String> getLoopLabels() throws Exception {
         throw new Exception("Undirected graph doesn't assume Loops");
-    }
-
-    @Override
-    Set<Edge> dijkstra(String s, String e) throws Exception {
-        throw new Exception("This algorithm only for weighted graph!");
     }
 
     @Override

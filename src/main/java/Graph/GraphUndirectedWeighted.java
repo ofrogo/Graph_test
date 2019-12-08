@@ -152,7 +152,8 @@ public class GraphUndirectedWeighted extends GraphAbstract {
                         "2)1b.1 Inverse graph.\n" +
                         "3)II.11 Find the cyclomatic number of a graph.\n" +
                         "4)II.31 Find shortest path from node to all other nodes\n" +
-                        "5)III Boruvka");
+                        "5)III Boruvka\n" +
+                        "6)IV.a Find centre.");
                 switch (scanner.nextInt()) {
                     case 1: {
                         System.out.println(getHangingNodes());
@@ -185,6 +186,10 @@ public class GraphUndirectedWeighted extends GraphAbstract {
                     }
                     case 5: {
                         System.out.println(boruvka().toString());
+                        break;
+                    }
+                    case 6: {
+                        System.out.println(center());
                         break;
                     }
                     default:

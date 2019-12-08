@@ -112,7 +112,8 @@ public class GraphDirectedWeighted extends GraphAbstract {
                         "1)1a.11 Show labels of loops\n" +
                         "2)1a.5 Show all hangings nodes.\n" +
                         "3)1b.1 Inverse graph.\n" +
-                        "4)II.31 Find shortest path from node to all other nodes");
+                        "4)II.31 Find shortest path from node to all other nodes\n" +
+                        "5)IV.a Find centre.");
                 switch (scanner.nextInt()) {
                     case 1: {
                         System.out.println(getLoopLabels());
@@ -141,6 +142,10 @@ public class GraphDirectedWeighted extends GraphAbstract {
                             }
                             System.out.println("}");
                         }
+                        break;
+                    }
+                    case 5: {
+                        System.out.println(center());
                         break;
                     }
                     default:

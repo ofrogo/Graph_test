@@ -98,6 +98,9 @@ public abstract class GraphAbstract {
     }
 
     Set<Edge> dijkstra(String s, String e) throws Exception {
+        if (getNumberOfComponents() > 1) {
+            throw new Exception("Unrelated graph!");
+        }
         if (s.equals(e)) {
             return new HashSet<Edge>() {
                 {
@@ -151,10 +154,16 @@ public abstract class GraphAbstract {
     }
 
 
-    Long eccentricity(String s) throws Exception {
+    Long eccentricity(String s) {
         long maxValue = Long.MIN_VALUE;
         for (String n : nodeList.keySet()) {
-            Set<Edge> path = dijkstra(s, n);
+            Set<Edge> path = null;
+            try {
+                path = dijkstra(s, n);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
             AtomicReference<Long> l = new AtomicReference<>(0L);
             path.forEach(edge -> l.updateAndGet(v -> v + edge.getValue()));
             maxValue = Long.max(maxValue, l.get());
@@ -163,7 +172,26 @@ public abstract class GraphAbstract {
     }
 
     Long radius() {
+        Set<Long> eccentricities = new HashSet<Long>() {{
+            for (String n : nodeList.keySet()) {
+                add(eccentricity(n));
+            }
+        }};
+        return eccentricities.stream().min(Long::compareTo).get();
+    }
 
+    Set<String> center() {
+        try {
+            Long radius = radius();
+            return new HashSet<String>() {{
+                nodeList.keySet().forEach(s -> {
+                    if (Objects.equals(eccentricity(s), radius)) add(s);
+                });
+            }};
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     List<String> getNodesIdFromVariousComponents() {
