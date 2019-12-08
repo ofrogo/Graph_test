@@ -1,14 +1,10 @@
 package Graph;
 
+import Entity.Edge;
 import Entity.Node;
 import Service.GraphService;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class GraphUndirectedUnweighted extends GraphAbstract {
     public GraphUndirectedUnweighted() {
@@ -198,6 +194,11 @@ public class GraphUndirectedUnweighted extends GraphAbstract {
     @Override
     List<String> getLoopLabels() throws Exception {
         throw new Exception("Undirected graph doesn't assume Loops");
+    }
+
+    @Override
+    Set<Edge> dijkstra(String s, String e) throws Exception {
+        throw new Exception("This algorithm only for weighted graph!");
     }
 
     @Override

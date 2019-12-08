@@ -42,4 +42,18 @@ public class Edge {
     public String getNodeId2() {
         return nodeId2;
     }
+
+    public boolean isConnectNode(String nodeId) {
+        return nodeId.equals(nodeId1) || nodeId.equals(nodeId2);
+    }
+
+
+    @Override
+    public String toString() {
+        return "Edge{" +
+                "nodeId1='" + nodeId1 + '\'' +
+                ", nodeId2='" + nodeId2 + '\'' +
+                ", value=" + value +
+                '}';
+    }
 }

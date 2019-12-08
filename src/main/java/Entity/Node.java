@@ -107,13 +107,13 @@ public class Node {
                 res = edge;
             }
         }
-        if (res.getValue() == Long.MAX_VALUE) {
+        if (res.getNodeId1().equals("") && res.getNodeId2().equals("")) {
             throw new Exception("Not found min edge in " + name);
         }
         return res;
     }
 
-    public Edge getMinEdge(Set<Edge> excessEdge) throws Exception {
+    public Edge getMinEdge(Set<Edge> excessEdge) {
         Edge res = new Edge("", "", Long.MAX_VALUE);
         Set<Edge> newEdges = getEdges();
         newEdges.removeAll(excessEdge);
@@ -122,7 +122,25 @@ public class Node {
                 res = edge;
             }
         }
-        if (res.getValue() == Long.MAX_VALUE) {
+        if (res.getNodeId1().equals("") && res.getNodeId2().equals("")) {
+            return null;
+        }
+        return res;
+    }
+
+    public Edge getMinEdgeWithoutExcessNodes(Set<String> excessNode) {
+        Edge res = new Edge("", "", Long.MAX_VALUE);
+        Set<Edge> newEdges = getEdges();
+        newEdges.forEach(edge -> {
+            if (excessNode.contains(edge.getNodeId1()) || excessNode.contains(edge.getNodeId2()))
+                newEdges.remove(edge);
+        });
+        for (Edge edge : newEdges) {
+            if (edge.getValue() < res.getValue()) {
+                res = edge;
+            }
+        }
+        if (res.getNodeId1().equals("") && res.getNodeId2().equals("")) {
             return null;
         }
         return res;

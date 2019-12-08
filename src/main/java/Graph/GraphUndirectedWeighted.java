@@ -4,13 +4,7 @@ import Entity.Edge;
 import Entity.Node;
 import Service.GraphService;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class GraphUndirectedWeighted extends GraphAbstract {
     public GraphUndirectedWeighted() {
@@ -240,35 +234,9 @@ public class GraphUndirectedWeighted extends GraphAbstract {
         }
 
         return new GraphUndirectedWeighted(edges);
-//        LinkedList<GraphUndirectedWeighted> graphLinkedList = new LinkedList<>();
-//        getNodeList().forEach((s, node) -> graphLinkedList.add(new GraphUndirectedWeighted(node)));
-//        for (int i = 0; !graphLinkedList.isEmpty(); i++) {
-//            GraphUndirectedWeighted graph = graphLinkedList.get(i);
-//            Edge minEdge = new Edge("", "", Long.MAX_VALUE);
-//            for (Edge e : graph.getEdges()) {
-//                if (e.getValue() < minEdge.getValue()) {
-//                    minEdge = e;
-//                }
-//            }
-//            LinkedList<GraphUndirectedWeighted> graphLinkedListTemp = new LinkedList<>(graphLinkedList);
-//            graphLinkedListTemp.remove(graph);
-//            for (GraphUndirectedWeighted g : graphLinkedListTemp) {
-//                if (g.getEdges().contains(minEdge)) {
-//                    if (graphLinkedList.remove(g)) {
-//                        graph.addGraph(g);
-//                        break;
-//                    } else {
-//                        throw new Exception("Error trying to merge subtrees");
-//                    }
-//                }
-//            }
-//        }
-//        if (graphLinkedList.size() == 1) {
-//            return graphLinkedList.getFirst();
-//        } else {
-//            throw new Exception("More then one components");
-//        }
     }
+
+
 
     @Override
     List<String> getLoopLabels() throws Exception {

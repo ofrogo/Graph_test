@@ -1,13 +1,9 @@
 package Graph;
 
+import Entity.Edge;
 import Service.GraphService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class GraphDirectedUnweighted extends GraphAbstract {
     public GraphDirectedUnweighted() {
@@ -166,5 +162,10 @@ public class GraphDirectedUnweighted extends GraphAbstract {
         return "Directed and Unweighted graph{\n" +
                 "nodeList=\n" + toStringUnwNodeList() +
                 "}";
+    }
+
+    @Override
+    Set<Edge> dijkstra(String s, String e) throws Exception {
+        throw new Exception("This algorithm only for weighted graph!");
     }
 }

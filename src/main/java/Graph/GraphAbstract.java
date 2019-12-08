@@ -3,15 +3,8 @@ package Graph;
 import Entity.Edge;
 import Entity.Node;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class GraphAbstract {
 
@@ -20,7 +13,7 @@ public abstract class GraphAbstract {
     private Map<String, Node> nodeList;
 
 
-    private Map<String, Boolean> used;
+    Map<String, Boolean> used;
 
     GraphAbstract() {
         nodeList = new HashMap<>();
@@ -102,6 +95,75 @@ public abstract class GraphAbstract {
             }
         }
         return cnt;
+    }
+
+    Set<Edge> dijkstra(String s, String e) throws Exception {
+        if (s.equals(e)) {
+            return new HashSet<Edge>() {
+                {
+                    add(new Edge(s, e, 0L));
+                }
+            };
+        }
+        if (used == null) used = new HashMap<>();
+        else used.clear();
+        for (String key : getNodeList().keySet()) {
+            used.put(key, false);
+        }
+        used.put(s, true);
+        Map<String, Long> dist = new HashMap<String, Long>() {{
+            for (String key : getNodeList().keySet()) {
+                put(key, Long.MAX_VALUE);
+            }
+        }};
+        Map<String, Edge> path = new HashMap<>();
+
+        Node node = getNodeList().get(s);
+        dist.put(node.getName(), 0L);
+        Node finalNode = node;
+        node.getNodes().forEach((s1, aLong) -> {
+            dist.put(s1, aLong);
+            path.put(s1, new Edge(s1, finalNode.getName(), aLong));
+        });
+        while (true) {
+            String curNodeId = node.getName();
+            String minNodeId = dist.entrySet().stream().filter(stringLongEntry -> !used.get(stringLongEntry.getKey()) && !stringLongEntry.getKey().equals(curNodeId)).min(Comparator.comparingLong(Map.Entry::getValue)).get().getKey();
+            if (minNodeId.isEmpty() || minNodeId.equals(e)) {
+                return new HashSet<Edge>() {{
+                    String tmp = e;
+                    while (!tmp.equals(s)) {
+                        add(path.get(tmp));
+                        tmp = path.get(tmp).getNodeId2();
+                    }
+                }};
+            }
+
+            node = getNodeList().get(minNodeId);
+            used.put(node.getName(), true);
+            node.getNodes().forEach((s1, aLong) -> {
+                if (!used.get(s1) && dist.get(minNodeId) + aLong < dist.get(s1)) {
+                    dist.put(s1, dist.get(minNodeId) + aLong);
+                    path.put(s1, new Edge(s1, minNodeId, aLong)); // предком вершины s1 является minNodeId
+                }
+            });
+
+        }
+    }
+
+
+    Long eccentricity(String s) throws Exception {
+        long maxValue = Long.MIN_VALUE;
+        for (String n : nodeList.keySet()) {
+            Set<Edge> path = dijkstra(s, n);
+            AtomicReference<Long> l = new AtomicReference<>(0L);
+            path.forEach(edge -> l.updateAndGet(v -> v + edge.getValue()));
+            maxValue = Long.max(maxValue, l.get());
+        }
+        return maxValue;
+    }
+
+    Long radius() {
+
     }
 
     List<String> getNodesIdFromVariousComponents() {
