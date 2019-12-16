@@ -1,13 +1,16 @@
 package Graph;
 
+import Entity.Edge;
+import Entity.EdgeAbstract;
+import Entity.Node;
+import Entity.OrEdge;
 import Service.GraphService;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class GraphDirectedWeighted extends GraphAbstract {
+    Map<String, OrEdge> capacity;
+
     public GraphDirectedWeighted() {
         super();
         directed = true;
@@ -29,6 +32,54 @@ public class GraphDirectedWeighted extends GraphAbstract {
     private void deleteCon(String name_model1, String name_model2) throws Exception {
         deleteOneCon(name_model1, name_model2);
     }
+
+
+    Set<OrEdge> getMyEdges() {
+        Set<OrEdge> edges = new HashSet<>();
+        for (Node n : nodeList.values()) {
+            for (Map.Entry<String, Long> entry : n.getNodes().entrySet()) {
+                OrEdge e = new OrEdge(n.getName(), entry.getKey(), entry.getValue());
+                if (!edges.add(e)) {
+                    System.out.println("Already have " + e);
+                }
+            }
+        }
+        return edges;
+    }
+
+
+    public int maxFlow(String source, String target) {
+        int maxFlow = 0;
+        int iterationResult = 0;
+        if (used == null) used = new HashMap<>();
+        do {
+            used.clear();
+            for (String key : getNodeList().keySet()) {
+                used.put(key, false);
+            }
+            iterationResult = flow(source, target, Integer.MAX_VALUE / 2);
+            maxFlow += iterationResult;
+        } while (iterationResult > 0);
+        return maxFlow;
+    }
+
+    private int flow(String u, String t, int cMin) {
+        if (u.equals(t)) return cMin;
+        used.put(u, true);
+        for (OrEdge edge : nodeList.get(u).getOrEdges()) {
+            String v = edge.getNodeId1().equals(u) ? edge.getNodeId2() : edge.getNodeId1();
+            if (!used.get(v) && edge.getFlow() < edge.getValue()) {
+                int minResult = flow(v, t, (int) Math.min(cMin, edge.getValue() - edge.getFlow()));
+                if (minResult > 0) {
+                    edge.setFlow(edge.getFlow() + minResult);
+                    edge.getBack().setFlow(edge.getBack().getFlow() - minResult);
+                    return minResult;
+                }
+            }
+        }
+        return 0;
+    }
+
 
     @Override
     public void showInUI(Scanner scanner) throws Exception {

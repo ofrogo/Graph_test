@@ -1,0 +1,1 @@
+{"directed":true,"weighted":true,"nodeList":[{"nodes":[{"name":"2","weight":2},{"name":"T","weight":2}],"name":"1"},{"nodes":[{"name":"T","weight":6}],"name":"2"},{"nodes":[{"name":"1","weight":4},{"name":"2","weight":5}],"name":"S"},{"nodes":[],"name":"T"}]}

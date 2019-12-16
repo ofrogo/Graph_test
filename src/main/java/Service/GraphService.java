@@ -18,7 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GraphService {
-    static String path = "/home/danil/Graph_test/src/main/resources/";
+    //static String path = "/home/danil/Graph_test/src/main/resources/";
+    static String path = "D:\\Projects\\Graph_test\\src\\main\\resources\\";
 
     public static void saveGraphToFile(String fileName, GraphAbstract graph) {
         JSONObject jsonObject = new JSONObject();

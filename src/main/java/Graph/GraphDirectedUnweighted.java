@@ -1,5 +1,9 @@
 package Graph;
 
+import Entity.Edge;
+import Entity.EdgeAbstract;
+import Entity.Node;
+import Entity.OrEdge;
 import Service.GraphService;
 
 import java.util.*;
@@ -154,6 +158,17 @@ public class GraphDirectedUnweighted extends GraphAbstract {
                 }
             }
         }
+    }
+
+    @Override
+    Set<EdgeAbstract> getEdges() {
+        Set<EdgeAbstract> edges = new HashSet<>();
+        for (Node n : nodeList.values()) {
+            for (Map.Entry<String, Long> entry : n.getNodes().entrySet()) {
+                edges.add(new OrEdge(n.getName(), entry.getKey(), entry.getValue()));
+            }
+        }
+        return edges;
     }
 
     @Override

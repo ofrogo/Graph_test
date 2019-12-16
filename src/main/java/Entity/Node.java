@@ -11,6 +11,7 @@ import java.util.Set;
 public class Node {
     private String name;
     private Map<String, Long> nodes;
+    private Set<OrEdge> orEdgeSet;
 
     public Node(String name, Set<Edge> edges) {
         this.name = name;
@@ -25,12 +26,21 @@ public class Node {
         this.nodes = nodes;
     }
 
-    public Set<Edge> getEdges() {
+    public HashSet<Edge> getEdges() {
         return new HashSet<Edge>() {{
             for (Map.Entry<String, Long> entry : nodes.entrySet()) {
                 add(new Edge(name, entry.getKey(), entry.getValue()));
             }
         }};
+    }
+
+    public  Set<OrEdge> getOrEdges() {
+        if(orEdgeSet==null) orEdgeSet = new HashSet<OrEdge>() {{
+            for (Map.Entry<String, Long> entry : nodes.entrySet()) {
+                add(new OrEdge(name, entry.getKey(), entry.getValue()));
+            }
+        }};
+        return orEdgeSet;
     }
 
     public int getNumberEdges() {

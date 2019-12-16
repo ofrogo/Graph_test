@@ -1,7 +1,9 @@
 package Graph;
 
 import Entity.Edge;
+import Entity.EdgeAbstract;
 import Entity.Node;
+import Entity.OrEdge;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -10,7 +12,7 @@ public abstract class GraphAbstract {
 
     Boolean directed;
     Boolean weighted;
-    private Map<String, Node> nodeList;
+    protected Map<String, Node> nodeList;
 
 
     Map<String, Boolean> used;
@@ -62,8 +64,6 @@ public abstract class GraphAbstract {
                 }
             }
         }
-
-
         return paths;
     }
 
@@ -151,6 +151,165 @@ public abstract class GraphAbstract {
             });
 
         }
+    }
+
+//    Map<String, OrEdge> floyd(String s) {
+//        Set<OrEdge> edgeSet = new HashSet<OrEdge>() {
+//            {
+//                for (String s1 : nodeList.keySet()) {
+//                    Set<String> nodeList1 = new HashSet<>(nodeList.keySet());
+//                    nodeList1.remove(s1);
+//                    for (String s2 : nodeList1) {
+//                        add(new OrEdge(s1, s2));
+//                    }
+//                }
+//            }
+//        };
+//        Map<OrEdge, Long> dict = new HashMap<OrEdge, Long>() {{
+//            for (String u : nodeList.keySet()) {
+//                Set<String> nodeList1 = new HashSet<>(nodeList.keySet());
+//                nodeList1.remove(u);
+//                for (String v : nodeList1) {
+//                    Long l = nodeList.get(u).isAdjacent(v) ? nodeList.get(u).getNodes().get(v) : Long.MAX_VALUE;
+//                    put(edgeSet.stream().filter(orEdge -> orEdge.isConnectNode(u) && orEdge.isConnectNode(v)).findFirst().get(), l);
+//                }
+//            }
+//        }};
+//        Map<String, OrEdge> path = new HashMap<>();
+//        for (String i : nodeList.keySet()) {
+//            for (String u : new HashSet<String>(nodeList.keySet()) {{
+//                remove(i);
+//            }}) {
+//                for (String v : new HashSet<String>(nodeList.keySet()) {{
+//                    remove(i);
+//                    remove(u);
+//                }}) {
+//                    if (dict.get(new OrEdge(u, i)) + dict.get(new OrEdge(i, v)) < dict.get(new OrEdge(u, v))) {
+//                        dict.put(new OrEdge(u, v), dict.get(new OrEdge(u, i)) + dict.get(new OrEdge(i, v)));
+//                        path.put(u, new OrEdge(u, i, dict.get(new OrEdge(u, i))));
+//                    }
+//                }
+//            }
+//        }
+//        return path;
+//    }
+
+    Map<String, List<String>> floyd(String s) {
+        Map<String, Integer> mapDictionary = new HashMap<String, Integer>() {{
+            int i = 0;
+            for (String n : nodeList.keySet()) {
+                put(n, i);
+                i++;
+            }
+        }};
+        String[] dictionary = new String[nodeList.size()];
+        {
+            int i = 0;
+            for (String n : nodeList.keySet()) {
+                dictionary[i] = n;
+                i++;
+            }
+        }
+        Long[][] dist = new Long[nodeList.size()][nodeList.size()];
+        Integer[][] next = new Integer[nodeList.size()][nodeList.size()];
+        for (int i = 0; i < nodeList.size(); i++) {
+            Arrays.fill(dist[i], Long.MAX_VALUE / 2);
+            Arrays.fill(next[i], 0);
+        }
+        for (Node node : nodeList.values()) {
+            for (Map.Entry<String, Long> stringLongEntry : node.getNodes().entrySet()) {
+                dist[mapDictionary.get(node.getName())][mapDictionary.get(stringLongEntry.getKey())] = stringLongEntry.getValue();
+                next[mapDictionary.get(node.getName())][mapDictionary.get(stringLongEntry.getKey())] = mapDictionary.get(stringLongEntry.getKey());
+            }
+
+        }
+
+        for (Integer i : mapDictionary.values()) {
+            for (Integer u : new ArrayList<Integer>(mapDictionary.values()) {{
+                remove(i);
+            }}) {
+                for (Integer v : new ArrayList<Integer>(mapDictionary.values()) {{
+                    remove(i);
+                    remove(u);
+                }}) {
+                    if (dist[u][i] + dist[i][v] < dist[u][v]) {
+                        dist[u][v] = dist[u][i] + dist[i][v];
+                        next[u][v] = next[u][i];
+                    }
+                }
+            }
+        }
+
+        Map<String, List<String>> result = new HashMap<>();
+        for (String v : new HashSet<String>(nodeList.keySet()) {{
+            remove(s);
+        }}) {
+            if (dist[mapDictionary.get(s)][mapDictionary.get(v)] == Long.MAX_VALUE / 2) {
+                result.put(v, null);
+                continue;
+            }
+            List<String> list = new ArrayList<>();
+            String c = s;
+            while (!c.equals(v)) {
+                list.add(c);
+                c = dictionary[next[mapDictionary.get(c)][mapDictionary.get(v)]];
+            }
+            result.put(v, list);
+        }
+        return result;
+    }
+
+    List<String> ford() {
+        Map<String, Integer> mapDictionary = new HashMap<String, Integer>() {{
+            int i = 0;
+            for (String n : nodeList.keySet()) {
+                put(n, i);
+                i++;
+            }
+        }};
+        String[] dictionary = new String[nodeList.size()];
+        {
+            int i = 0;
+            for (String n : nodeList.keySet()) {
+                dictionary[i] = n;
+                i++;
+            }
+        }
+        Long[] d = new Long[nodeList.size()];
+        Arrays.fill(d, Long.MAX_VALUE / 2);
+        d[0] = 0L;
+        int[] p = new int[nodeList.size()];
+        Arrays.fill(p, -1);
+        int x = 0;
+        for (int i = 0; i < nodeList.size(); i++) {
+            x = -1;
+            for (EdgeAbstract e : getEdges()) {
+                if (d[mapDictionary.get(e.getNodeId1())] > d[mapDictionary.get(e.getNodeId2())] + e.getValue()) {
+                    d[mapDictionary.get(e.getNodeId1())] = Math.max(d[mapDictionary.get(e.getNodeId2())] + e.getValue(), -Long.MAX_VALUE / 2);
+                    p[mapDictionary.get(e.getNodeId1())] = mapDictionary.get(e.getNodeId2());
+                    x = mapDictionary.get(e.getNodeId1());
+                }
+            }
+        }
+        List<String> path = new ArrayList<>();
+        if (x == -1) {
+            return null;
+        } else {
+            int y = x;
+            for (int i = 0; i < nodeList.size(); i++) {
+                y = p[y];
+            }
+
+            for (int i = y; ; i = p[i]) {
+                if (i == y && path.size() > 1) {
+                    break;
+                }
+                path.add(dictionary[i]);
+            }
+            Collections.reverse(path);
+        }
+
+        return path;
     }
 
 
@@ -284,8 +443,8 @@ public abstract class GraphAbstract {
 
     public abstract void showInUI(Scanner scanner) throws Exception;
 
-    Set<Edge> getEdges() {
-        Set<Edge> edges = new HashSet<>();
+    Set<EdgeAbstract> getEdges() {
+        Set<EdgeAbstract> edges = new HashSet<>();
         for (Node n : nodeList.values()) {
             for (Map.Entry<String, Long> entry : n.getNodes().entrySet()) {
                 edges.add(new Edge(n.getName(), entry.getKey(), entry.getValue()));
